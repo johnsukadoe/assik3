@@ -40,14 +40,35 @@
         main{
             margin: 20px;
         }
+        footer {
+            text-align: center;
+            margin-top: 20px; 
+            padding: 10px 0; 
+            background-color: #333;
+            color: #fff; 
+            bottom: 0;
+            left: 0;
+            width: 100%;
+        }
+
+        footer h4 {
+            margin-bottom: 5px;
+        }
+
+        footer h6 {
+            margin-top: 0;
+            font-size: 14px;
+        }
     </style>
 </head>
 <body>
     <nav>
         <ul>
-            <li><a href="#">Main</a></li>
-            <li><a href="#">History</a></li>
-            <li><a href="#">Users</a></li>
+            <li><a href="/main">Main</a></li>
+            <li><a href="/history">History</a></li>
+            <% if (is_admin) { %>
+                <li><a href="/users">Users</a></li>
+            <% } %>
         </ul>
     </nav>
     <main>
@@ -57,7 +78,10 @@
     </main>
    
 
-
+    <footer>
+        <h4>Shynar Miras</h4>
+        <h6>SE-2206</h6>
+    </footer>
     <script>
         const air = <%- JSON.stringify(air) %>;
         console.log(air);

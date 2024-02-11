@@ -19,8 +19,10 @@ app.post('/login', async (req, res)=>{
     const {name, password} = req.body;
 
     const user = await User.findOne({name, password});
+    console.log(user);
     if (user) {
         req.session.name = name;
+        req.session.is_admin = user.is_admin;
         res.redirect('/main');
     } else {
         res.send('Invalid login credentials');
@@ -37,6 +39,7 @@ app.post('/signin', async (req, res) =>{
     await User.create({name, password, create_time, update_time, delete_time, is_admin});
 
     req.session.name = name;
+    req.session.is_admin = is_admin;
     res.redirect('/main');
 })
 
@@ -83,18 +86,18 @@ app.get('/', (req, res) => {
 })
 
 app.get('/main', async (req, res) =>{
-    const {name} = req.session;
+    const {name, is_admin} = req.session;
     let latestWeatherData = await WeatherData.findOne({ name }).sort({ createdAt: -1 });
     if(!latestWeatherData){
         latestWeatherData = {};
     }else{
         req.session.city = latestWeatherData.city;
     }
-    res.render('index', {name, latestWeatherData})
+    res.render('index', {name, latestWeatherData, is_admin})
 })
 
 app.get('/air-quality', async (req, res) => {
-    const {name, city} = req.session;
+    const {name, city, is_admin} = req.session;
     let air= {}
 
     const apiKey = "1mAakESykRxpQRG/SXJW0Q==Hu2qwg2bn88cyiom";
@@ -112,10 +115,10 @@ app.get('/air-quality', async (req, res) => {
         air_quality:{...air},
         createdAt: Date.now()
     })
-    res.render('air-quality', {city, name, air});
+    res.render('air-quality', {city, name, air, is_admin});
 });
 app.get('/disasters', async (req, res) =>{
-    const {name} = req.session;
+    const {name, is_admin} = req.session;
     let features = [];
     await axios.get(`https://www.gdacs.org/gdacsapi/api/events/geteventlist/ARCHIVE`)
     .then(response => {
@@ -137,8 +140,17 @@ app.get('/disasters', async (req, res) =>{
 
     let disastersData = await disasters.find().limit(1);
     console.log(disastersData, 'something');
-    res.render('disasters', {disastersData});
+    res.render('disasters', {disastersData, is_admin});
 })
+
+
+app.get('/history', async (req, res) =>{
+    const {name, is_admin} = req.session;
+
+    let historyData = await WeatherData.find({name});
+    res.render('history', {historyData, is_admin});
+})
+
 
 app.listen(port, () => {
     console.log(`Server listening at http://localhost:${port}`);
