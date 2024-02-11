@@ -73,6 +73,35 @@ app.post('/search', async (req, res) =>{
     }
 })
 
+app.post('/edit/:create_time', async (req, res) => {
+    try {
+        const createTime = req.params.create_time;
+
+        if (!req.body.name || !req.body.password || req.body.admin === undefined) {
+            return res.status(400).json({ error: 'Missing required fields' });
+        }
+
+        const updatedUser = await User.findOneAndUpdate(
+            { create_time: createTime },
+            { 
+                name: req.body.name,
+                password: req.body.password,
+                is_admin: req.body.admin === 'true' 
+            },
+            { new: true } 
+        );
+
+        if (!updatedUser) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        res.redirect('/users');
+    } catch (error) {
+        console.error('Error updating user:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
 
 app.get('/login', (req, res) => {
     res.render('login');
