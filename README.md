@@ -14,8 +14,8 @@ The weather application provides real-time weather updates for cities, alerts ab
 ``` nodemon server.js ```
 
 ## Admin:
-### Name: miras
-### Password: qwerty
+#### Name: miras
+#### Password: qwerty
 
 ## Dependencies:
 1. Amcharts
