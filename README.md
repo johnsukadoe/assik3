@@ -1,5 +1,6 @@
 # Weather application
 The weather application provides real-time weather updates for cities, alerts about natural disasters, and information on air quality. It is developed using Node.js and Express, and it integrates with external APIs to fetch weather data, air quality information, and news about natural disasters.
+## The online website is temporarily disabled when there is no activity, please remind me of this before checking the work.
 #### Login Page
 ### https://weather-asik.onrender.com/login
 #### Sign Up page
