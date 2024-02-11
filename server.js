@@ -102,6 +102,15 @@ app.post('/edit/:create_time', async (req, res) => {
     }
 });
 
+app.post('/create', async (req, res) => {
+    const {name, password, admin} = req.body;
+
+    const create_time = Date.now();
+    const is_admin = admin === 'true';
+    await User.create({name, password, create_time, is_admin});
+
+    res.redirect('/users');
+});
 
 app.get('/login', (req, res) => {
     res.render('login');

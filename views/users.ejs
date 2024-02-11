@@ -89,7 +89,7 @@
             margin-top: 10px;
         }
 
-        .button-container button, .button-container a {
+        .button-container button, .button-container a, .createButton{
             padding: 10px 20px;
             margin-right: 10px;
             border: none;
@@ -107,7 +107,9 @@
         .button-container button:hover {
             background-color: #45a049;
         }
-
+        .createButton:hover {
+            background-color: #45a049;
+        }
         .modal {
             display: none; 
             position: fixed; 
@@ -159,6 +161,7 @@
     </nav>
     <div class="container">
         <h2>List of Users</h2>
+        <button onclick="createUser()" class="createButton">Create User</button>
         <ul class="user-list">
             <% users.forEach(function(user) { %>
                 <li style="display: flex; flex-direction: row; justify-content: space-between; ">
@@ -221,7 +224,15 @@
 
             modal.style.display = "block";
         }
+        function createUser() {
+            var modal = document.getElementById("myModal");
+            var form = modal.querySelector("#editUserForm");
 
+            var editForm = document.getElementById('editUserForm');
+            editForm.action = "/create";
+
+            modal.style.display = "block";
+        }
 
         function closeModal() {
             var modal = document.getElementById("myModal");
