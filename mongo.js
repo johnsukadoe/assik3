@@ -33,7 +33,20 @@ const WeatherData = mongoose.model('histories', {
     timezone:Number,
     createdAt:Number,
 });
+const airquality = mongoose.model('airqualities', {
+    name: String,
+    city: String,
+    air_quality: Object,
+    createdAt:Number,
+});
+
+const disasters = mongoose.model('disasters', {
+    name: String,
+    features:Array,
+    createdAt:Number,
+});
 
 module.exports = {
-    User,WeatherData
+    User,WeatherData, airquality, disasters
 };
+

@@ -1,4 +1,4 @@
-const {User, WeatherData} = require("./mongo");
+const {User, WeatherData, airquality, disasters} = require("./mongo");
 
 const express = require('express');
 const session = require('express-session');
@@ -16,11 +16,9 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 app.post('/login', async (req, res)=>{
-    console.log(req.body);
     const {name, password} = req.body;
 
     const user = await User.findOne({name, password});
-    console.log(user);
     if (user) {
         req.session.name = name;
         res.redirect('/main');
@@ -43,7 +41,6 @@ app.post('/signin', async (req, res) =>{
 })
 
 app.post('/search', async (req, res) =>{
-    console.log(req);
     const {city} = req.body;
 
     const apiKey = '394f7ad19bb5c5525c4ddb18324358d7';
@@ -64,8 +61,6 @@ app.post('/search', async (req, res) =>{
             createdAt
         });
 
-        res.session.name = name;
-        res.session.createdAt = createdAt;
         res.redirect('/main');
     } catch (error) {
         console.error('Error fetching weather data:', error);
@@ -88,29 +83,62 @@ app.get('/', (req, res) => {
 })
 
 app.get('/main', async (req, res) =>{
-    console.log(req.session);
-    const {name, createdAt} = req.session;
-    const latestWeatherData = await WeatherData.findOne({ name }).sort({ createdAt: -1 });
-
-    res.render('index', {name, latestWeatherData});
+    const {name} = req.session;
+    let latestWeatherData = await WeatherData.findOne({ name }).sort({ createdAt: -1 });
+    if(!latestWeatherData){
+        latestWeatherData = {};
+    }else{
+        req.session.city = latestWeatherData.city;
+    }
+    res.render('index', {name, latestWeatherData})
 })
 
 app.get('/air-quality', async (req, res) => {
-    const {name, createdAt, city} = req.session;
-    const latestWeatherData = await WeatherData.findOne({ name }).sort({ createdAt: -1 });
+    const {name, city} = req.session;
+    let air= {}
 
     const apiKey = "1mAakESykRxpQRG/SXJW0Q==Hu2qwg2bn88cyiom";
-    axios.get(`https://api.api-ninjas.com/v1/airquality?city=${latestWeatherData.city}`, {
+    await axios.get(`https://api.api-ninjas.com/v1/airquality?city=${city}`, {
     headers: {
         'X-Api-Key': apiKey
     }
     })
     .then(response => {
-        const air = response.data;
-
-        res.render('air-quality', {name, latestWeatherData, air});
+        air = response.data;
     })
+    await airquality.create({
+        name, 
+        city,
+        air_quality:{...air},
+        createdAt: Date.now()
+    })
+    res.render('air-quality', {city, name, air});
 });
+app.get('/disasters', async (req, res) =>{
+    const {name} = req.session;
+    let features = [];
+    await axios.get(`https://www.gdacs.org/gdacsapi/api/events/geteventlist/ARCHIVE`)
+    .then(response => {
+        for(let i = 0; i<response.data.features.length; i++){
+            let object = {
+                event_name: response.data.features[i].properties.name,
+                description: response.data.features[i].properties.htmldescription,
+                alertLevel: response.data.features[i].properties.alertLevel,
+                country:response.data.features[i].properties.country
+            }
+            features.push(object);
+        }
+    })
+    await disasters.create({
+        name, 
+        features,
+        createdAt: Date.now()
+    })
+
+    let disastersData = await disasters.find().limit(1);
+    console.log(disastersData, 'something');
+    res.render('disasters', {disastersData});
+})
 
 app.listen(port, () => {
     console.log(`Server listening at http://localhost:${port}`);

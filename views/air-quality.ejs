@@ -7,29 +7,68 @@
     <script src="https://cdn.amcharts.com/lib/4/core.js"></script>
     <script src="https://cdn.amcharts.com/lib/4/charts.js"></script>
     <script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+
+        nav {
+            background-color: #333;
+            color: #fff;
+            padding: 10px 0;
+        }
+
+        nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+
+        nav ul li {
+            display: inline;
+            margin-right: 20px;
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+        }
+        main{
+            margin: 20px;
+        }
+    </style>
 </head>
 <body>
-    <h1>Air quality of <%= city %></h1>
-    <div id="aqiChart" style="width: 100%; height: 500px;"></div>
+    <nav>
+        <ul>
+            <li><a href="#">Main</a></li>
+            <li><a href="#">History</a></li>
+            <li><a href="#">Users</a></li>
+        </ul>
+    </nav>
+    <main>
+        <h1>Air quality of <%= city %></h1>
+        <h2>Overall aqi <%= air.overall_aqi %></h2>
+        <div id="aqiChart" style="width: 100%; height: 500px;"></div>
+    </main>
+   
 
 
     <script>
         const air = <%- JSON.stringify(air) %>;
         console.log(air);
-        
-        // Extracting data from air object
         const labels = Object.keys(air);
         const concentrations = labels.map(label => air[label].concentration);
         const aqis = labels.map(label => air[label].aqi);
-        const overall_aqi = air.overall_aqi;
 
-        // Create chart instance
         let chart = am4core.create("aqiChart", am4charts.XYChart);
 
-        // Add data
         chart.data = labels.map((label, index) => ({ pollutant: label, concentration: concentrations[index], aqi: aqis[index] }));
 
-        // Create axes
         let categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
         categoryAxis.dataFields.category = "pollutant";
         categoryAxis.renderer.grid.template.location = 0;
@@ -37,7 +76,6 @@
 
         let valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
 
-        // Create series
         let series = chart.series.push(new am4charts.ColumnSeries());
         series.dataFields.valueY = "concentration";
         series.dataFields.categoryX = "pollutant";
@@ -52,16 +90,9 @@
         series2.columns.template.tooltipText = "{name}: [bold]{valueY}[/]";
         series2.columns.template.fillOpacity = .8;
 
-        // Add cursor
         chart.cursor = new am4charts.XYCursor();
 
-        // Add legend
         chart.legend = new am4charts.Legend();
-
-        // Display overall AQI
-        const overallAQIElement = document.createElement("div");
-        overallAQIElement.innerText = `Overall AQI: ${overall_aqi}`;
-        document.body.appendChild(overallAQIElement);
     </script>
 </body>
 </html>

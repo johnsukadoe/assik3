@@ -137,19 +137,24 @@
 
         <div>
             <div class="card">
-                <p>Latest weather info</p>
-                <h2><%= latestWeatherData.city %></h2>
-                <h3>Temperature: <%= latestWeatherData.temperature %></h3>
-                <h3>Description: <%= latestWeatherData.description %></h3>
-                <div>
-                    Country:<%= latestWeatherData.country %>
-                    Timezone:<%= latestWeatherData.timezone %>
-                </div>
-                <div>
-                    <a href="/air-quality">Air quality</a>
-                    <a href="/disasters">About natural disasters</a>
-                </div>
+                <% if (Object.keys(latestWeatherData).length > 0) { %>
+                    <p>Latest weather info</p>
+                    <h2><%= latestWeatherData.city %></h2>
+                    <h3>Temperature: <%= latestWeatherData.temperature %></h3>
+                    <h3>Description: <%= latestWeatherData.description %></h3>
+                    <div>
+                        Country: <%= latestWeatherData.country %>
+                        Timezone: <%= latestWeatherData.timezone %>
+                    </div>
+                    <div>
+                        <a href="/air-quality">Air quality</a>
+                        <a href="/disasters">About natural disasters</a>
+                    </div>
+                <% } else { %>
+                    <h5>No weather data available</h5>
+                <% } %>
             </div>
+            
         </div>
     </main>
 </body>
