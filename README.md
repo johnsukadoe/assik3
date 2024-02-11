@@ -6,12 +6,18 @@ The weather application provides real-time weather updates for cities, alerts ab
 ### https://weather-asik.onrender.com/signin
 
 ## Installation
-1.Clone the repository:
-``` git clone https://github.com/johnsukadoe/assik3.git ```
+ 1.Clone the repository:
+```
+git clone https://github.com/johnsukadoe/assik3.git
+```
 2.Navigate to the project directory and install dependencies.
-``` npm install ```
+```
+npm install
+```
 3.Start the server:
-``` nodemon server.js ```
+```
+nodemon server.js
+```
 
 ## Admin:
 #### Name: miras
