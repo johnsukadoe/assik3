@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Users</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+
+        nav {
+            background-color: #333;
+            color: #fff;
+            padding: 10px 0;
+        }
+
+        nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+
+        nav ul li {
+            display: inline;
+            margin-right: 20px;
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+        }
+        nav ul li a:hover{
+            color: #026100;
+            text-decoration: none;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 20px; 
+            padding: 10px 0; 
+            background-color: #333; 
+            color: #fff; 
+            bottom: 0;
+            left: 0;
+            width: 100%;
+        }
+
+        footer h4 {
+            margin-bottom: 5px;
+        }
+
+        footer h6 {
+            margin-top: 0;
+            font-size: 14px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+
+        .user-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .user-list li {
+            background-color: #fff;
+            margin-bottom: 10px;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .user-list li strong {
+            font-weight: bold;
+        }
+
+        .user-list li:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        .button-container {
+            margin-top: 10px;
+        }
+
+        .button-container button, .button-container a {
+            padding: 10px 20px;
+            margin-right: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #4caf50;
+            color: #fff;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 13px;
+            transition: background-color 0.3s ease;
+        }
+        .button-container a:hover {
+            background-color: #45a049;
+        }
+        .button-container button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="/main">Main</a></li>
+            <li><a href="/history">History</a></li>
+            <% if (is_admin) { %>
+                <li><a href="/users">Users</a></li>
+            <% } %>
+        </ul>
+    </nav>
+    <div class="container">
+        <h2>List of Users</h2>
+        <ul class="user-list">
+            <% users.forEach(function(user) { %>
+                <li style="display: flex; flex-direction: row; justify-content: space-between; ">
+                    <div style="display: flex; flex-direction: column;">
+                        <div>
+                            <strong>Name:</strong> <%= user.name %>, 
+                        </div>
+                        <div>
+                            <strong>Password:</strong><%= user.password %>,
+                        </div>
+                        <div>
+                            <strong>Admin:</strong> <%= user.is_admin ? 'Yes' : 'No' %>
+                        </div>
+                        <div>
+                            <strong>Create Time:</strong> <%= new Date(user.create_time).toLocaleString() %>
+                        </div>
+                    </div>
+                    <div class="button-container">
+                        <button>Edit</button>
+                        <a href="/users/delete/<%= user.create_time %>" onclick="return confirm('Вы уверены, что хотите удалить этого пользователя?')">Delete</a>
+                    </div>
+                </li>
+            <% }); %>
+        </ul>
+    </div>
+    <footer>
+        <h4>Shynar Miras</h4>
+        <h6>SE-2206</h6>
+    </footer>
+</body>
+</html>

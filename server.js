@@ -23,6 +23,7 @@ app.post('/login', async (req, res)=>{
     if (user) {
         req.session.name = name;
         req.session.is_admin = user.is_admin;
+        req.session.created_time = user.create_time;
         res.redirect('/main');
     } else {
         res.send('Invalid login credentials');
@@ -40,6 +41,7 @@ app.post('/signin', async (req, res) =>{
 
     req.session.name = name;
     req.session.is_admin = is_admin;
+    req.session.created_time = create_time;
     res.redirect('/main');
 })
 
@@ -149,6 +151,31 @@ app.get('/history', async (req, res) =>{
 
     let historyData = await WeatherData.find({name});
     res.render('history', {historyData, is_admin});
+})
+
+app.get('/users', async (req, res) =>{
+    const {name, is_admin} = req.session;
+
+    let users = await User.find();
+    res.render('users', {users, is_admin});
+})
+
+
+app.get('/users/delete/:create_time', async (req, res) =>{
+    const {name, is_admin, created_time} = req.session;
+    const create_time = req.params.create_time;
+    if(create_time == created_time){
+        res.redirect('/users');
+    }else{
+        try {
+            await User.deleteOne({ create_time: create_time });
+    
+            res.redirect('/users'); 
+        } catch (error) {
+            console.error('Error deleting user:', error);
+            res.status(500).send('Internal Server Error'); 
+        }
+    }
 })
 
 
