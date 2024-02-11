@@ -15,8 +15,25 @@ mongoose.connection.on('connected', () => {
     });
 });
 
-const User = mongoose.model('users', { name: String, password: String });
+const User = mongoose.model('users', { 
+    name: String,
+    password: String,
+    create_time:Number,
+    update_time:Number,
+    delete_time:Number,
+    is_admin:Boolean,
+});
+
+const WeatherData = mongoose.model('histories', {
+    name: String,
+    city: String,
+    temperature: Number,
+    description: String,
+    country:String,
+    timezone:Number,
+    createdAt:Number,
+});
 
 module.exports = {
-    User,
+    User,WeatherData
 };

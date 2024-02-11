@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+
+        nav {
+            background-color: #333;
+            color: #fff;
+            padding: 10px 0;
+        }
+
+        nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+
+        nav ul li {
+            display: inline;
+            margin-right: 20px;
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        main {
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        h1 {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        form {
+            margin-top: 20px;
+        }
+
+        input[type="text"] {
+            padding: 10px;
+            width: 300px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        button[type="submit"] {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        .card {
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+            margin: 0 auto;
+            margin-top: 20px;
+            max-width: 300px;
+        }
+
+        .card h2 {
+            margin-top: 0;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .card h3 {
+            margin-top: 0;
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+
+        .card div {
+            margin-top: 10px;
+            font-size: 16px;
+        }
+        .card p {
+            text-align: right;
+            margin: 0;
+            padding: 0;
+            color: #ccc;
+            font-size: 11px;
+        }
+        .card a{
+            color: #333;
+            text-decoration: none;
+        }
+        .card a:hover{
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="#">Main</a></li>
+            <li><a href="#">History</a></li>
+            <li><a href="#">Users</a></li>
+        </ul>
+    </nav>
+    <main>
+        <h1>Weather App</h1>
+        <h2>Write city name <%= name %> </h2>
+        <form action="/search" method="post">
+            <input type="text" id="city" name="city" required>
+            <button type="submit">Find weather</button>
+        </form>
+
+        <div>
+            <div class="card">
+                <p>Latest weather info</p>
+                <h2><%= latestWeatherData.city %></h2>
+                <h3>Temperature: <%= latestWeatherData.temperature %></h3>
+                <h3>Description: <%= latestWeatherData.description %></h3>
+                <div>
+                    Country:<%= latestWeatherData.country %>
+                    Timezone:<%= latestWeatherData.timezone %>
+                </div>
+                <div>
+                    <a href="/air-quality">Air quality</a>
+                    <a href="/disasters">About natural disasters</a>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>
