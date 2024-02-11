@@ -59,6 +59,7 @@ Using charts in page about air quality. There you can pick some information with
 
 ## Usage
 1)The server runs on port 3000.
+
 2)Firstly you need to sign up or sign in ``` http://localhost:3000 ```(the domain automatically redirect to login page).
 ![image](https://github.com/johnsukadoe/assik3/assets/116514476/3848afe6-8fa8-498c-9040-964c6a296dbe)
 3)After registration, the website redirect to main page, there you can find weather of the some city.
